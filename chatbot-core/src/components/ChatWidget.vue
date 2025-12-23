@@ -2,12 +2,14 @@
   <div
     class="widget"
     :class="[position, { open: isOpen }]"
-    :style="{ zIndex: zIndex }"
+    :style="widgetStyle"
   >
     <ChatHeader
       @toggle="toggle"
       :primaryColor="primaryColor"
       :isOpen="isOpen"
+      :isDraggable="config.isDraggable"
+      @dragStart="onMouseDown"
     />
     <div class="widget-body">
       <ChatMessages :messages="messages" />
@@ -17,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
 import ChatHeader from "./ChatHeader.vue";
 import ChatMessages from "./ChatMessages.vue";
 import ChatInput from "./ChatInput.vue";
@@ -43,6 +45,49 @@ onMounted(() => {
 });
 const isOpen = ref(false);
 const messages = ref<ChatMessage[]>([]);
+const config = getConfig();
+
+const isDragging = ref(false);
+const offset = reactive({ x: 0, y: 0 });
+const dimensions = reactive({ height: 480 });
+const startPos = { x: 0, y: 0, h: 0 };
+
+const widgetStyle = computed(() => ({
+  transform: `translateX(${offset.x}px)`,
+  height: isOpen.value ? `${dimensions.height}px` : "48px",
+  zIndex: props.zIndex,
+  transition: isDragging.value
+    ? "none"
+    : "height 0.35s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s ease",
+}));
+
+function onMouseDown(e: MouseEvent) {
+  if (!config.isDraggable || !isOpen.value) return;
+  isDragging.value = true;
+  startPos.x = e.clientX - offset.x;
+  startPos.y = e.clientY;
+  startPos.h = dimensions.height;
+  window.addEventListener("mousemove", onMouseMove);
+  window.addEventListener("mouseup", onMouseUp);
+  document.body.style.userSelect = "none";
+}
+
+function onMouseMove(e: MouseEvent) {
+  if (!isDragging.value) return;
+  offset.x = e.clientX - startPos.x;
+  const deltaY = startPos.y - e.clientY;
+  const nextHeight = startPos.h + deltaY;
+  const maxHeight = window.innerHeight * 0.7;
+  dimensions.height = Math.min(Math.max(nextHeight, 300), maxHeight);
+}
+
+function onMouseUp() {
+  isDragging.value = false;
+  document.body.style.userSelect = "";
+  window.removeEventListener("mousemove", onMouseMove);
+  window.removeEventListener("mouseup", onMouseUp);
+}
+
 function toggle() {
   isOpen.value = !isOpen.value;
 }
@@ -72,17 +117,19 @@ const left = computed(() => (props.position === "left" ? "24px" : "auto"));
 .widget {
   position: fixed;
   width: 320px;
-  height: 56px;
+  height: 48px;
   display: flex;
   flex-direction: column;
   border-radius: 18px 18px 0 0;
-  overflow: hidden;
   background: #f7f7fb;
-  box-shadow: 0 16px 40px #00000040;
+  box-shadow: 0 16px 48px #00000040;
   bottom: 0;
   right: v-bind(right);
   left: v-bind(left);
   transition: height 0.35s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.35s;
+  max-height: 70vh;
+  will-change: transform, height;
+  touch-action: none;
 }
 .widget.open {
   height: 480px;

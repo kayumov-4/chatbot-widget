@@ -7,4 +7,5 @@ export const defaultConfig: Required<WidgetConfig> = {
   position: "right",
   welcomeMessage: "Salom, qanday yordam bera olaman?",
   zIndex: 9999,
+  isDraggable: true,
 };

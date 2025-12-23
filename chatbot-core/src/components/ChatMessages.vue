@@ -18,8 +18,6 @@ import ChatMessageItem from "./ChatMessageItem.vue";
 const props = defineProps<{
   messages: ChatMessage[];
 }>();
-
-console.log(props.messages);
 </script>
 
 <style scoped>

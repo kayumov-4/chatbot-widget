@@ -5,4 +5,5 @@ export interface WidgetConfig {
   position?: "right" | "left";
   welcomeMessage?: string;
   zIndex?: number;
+  isDraggable?: boolean;
 }
