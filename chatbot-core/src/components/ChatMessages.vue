@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ChatMessage } from "../entities/chat/interfaces/charMessage";
+import type { ChatMessage } from "../entities/chat/interfaces/chatMessage";
 import ChatBubble from "./ChatBubble.vue";
 
 defineProps<{

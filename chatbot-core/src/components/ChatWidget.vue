@@ -11,7 +11,7 @@ import { computed, onMounted, ref } from "vue";
 import ChatHeader from "./ChatHeader.vue";
 import ChatMessages from "./ChatMessages.vue";
 import ChatInput from "./ChatInput.vue";
-import type { ChatMessage } from "../entities/chat/interfaces/charMessage";
+import type { ChatMessage } from "../entities/chat/interfaces/chatMessage";
 import { getConfig } from "../config/getConfig";
 
 const props = defineProps({
