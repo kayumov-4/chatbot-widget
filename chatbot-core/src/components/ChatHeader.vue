@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <span class="title">Call24</span>
+    <span class="title">Savolingizni yo'llang!</span>
 
     <div class="actions">
       <button class="drag-handle" title="Move" @mousedown.stop="emitDrag">
