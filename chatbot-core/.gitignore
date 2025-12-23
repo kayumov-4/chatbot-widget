@@ -12,8 +12,7 @@ node_modules
 
 # Ignore everything in dist EXCEPT widget build
 dist
-!chatbot-core/dist/
-!chatbot-core/dist/chatbot.js
+!dist/chatbot.js
 
 # SSR (agar ishlatilsa)
 dist-ssr
