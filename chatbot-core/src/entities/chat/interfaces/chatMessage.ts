@@ -4,4 +4,6 @@ export interface ChatMessage {
   id: number;
   role: ChatRole;
   text: string;
+  author?: string;
+  createdAt: number;
 }

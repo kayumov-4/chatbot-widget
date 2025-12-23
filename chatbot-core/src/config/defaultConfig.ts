@@ -5,6 +5,6 @@ export const defaultConfig: Required<WidgetConfig> = {
   title: "Chatbot",
   primaryColor: "#6c63ff",
   position: "right",
-  welcomeMessage: "Hello 👋 How can I help you?",
+  welcomeMessage: "Salom, qanday yordam bera olaman?",
   zIndex: 9999,
 };

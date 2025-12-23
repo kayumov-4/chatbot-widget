@@ -1,21 +1,25 @@
 <template>
   <div class="messages">
-    <ChatBubble
+    <ChatMessageItem
       v-for="msg in messages"
       :key="msg.id"
       :role="msg.role"
       :text="msg.text"
+      :author="msg.author"
+      :createdAt="msg.createdAt"
     />
   </div>
 </template>
 
 <script setup lang="ts">
 import type { ChatMessage } from "../entities/chat/interfaces/chatMessage";
-import ChatBubble from "./ChatBubble.vue";
+import ChatMessageItem from "./ChatMessageItem.vue";
 
-defineProps<{
+const props = defineProps<{
   messages: ChatMessage[];
 }>();
+
+console.log(props.messages);
 </script>
 
 <style scoped>
