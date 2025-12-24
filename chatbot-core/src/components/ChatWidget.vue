@@ -36,12 +36,28 @@ const props = defineProps({
 onMounted(() => {
   const config = getConfig();
   messages.value.push({
+    id: 1763453683533,
+    role: "bot",
+    author: "Bot",
+    text: config.welcomeMessage,
+    createdAt: 1763453683533,
+  });
+  messages.value.push({
+    id: 1766453683533,
+    role: "bot",
+    author: "Bot",
+    text: config.welcomeMessage,
+    createdAt: 1766453683533,
+  });
+  messages.value.push({
     id: Date.now(),
     role: "bot",
     author: "Bot",
     text: config.welcomeMessage,
     createdAt: Date.now(),
   });
+
+  console.log("ChatWidget mounted", messages.value);
 });
 const isOpen = ref(false);
 const messages = ref<ChatMessage[]>([]);

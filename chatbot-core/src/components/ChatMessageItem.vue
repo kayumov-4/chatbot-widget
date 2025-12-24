@@ -3,11 +3,6 @@
     <div class="bubble">
       {{ text }}
     </div>
-
-    <div class="meta">
-      <span class="author">{{ authorLabel }}</span>
-      <span class="time">{{ time }}</span>
-    </div>
   </div>
 </template>
 
@@ -41,7 +36,7 @@ const authorLabel = computed(() => {
   display: flex;
   flex-direction: column;
   max-width: 75%;
-  margin-bottom: 12px;
+  margin-bottom: 5px;
   font-size: 14px;
   line-break: auto;
 }
@@ -74,7 +69,6 @@ const authorLabel = computed(() => {
 }
 
 .meta {
-  margin-top: 4px;
   font-size: 11px;
   color: #888;
   display: flex;

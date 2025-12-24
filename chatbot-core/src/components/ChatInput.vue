@@ -38,7 +38,7 @@ function submit() {
 <style scoped>
 .input {
   display: flex;
-  padding: 10px;
+  padding: 5px 10px;
   border-top: 1px solid #eee;
   background: white;
 }
