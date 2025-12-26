@@ -5,8 +5,8 @@
     <div class="actions">
       <button class="drag-handle" title="Move" @mousedown.stop="emitDrag">
         <svg
-          width="24"
-          height="24"
+          width="20"
+          height="20"
           viewBox="0 0 24 24"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -47,7 +47,10 @@
         </svg>
       </button>
 
-      <ChatHeaderVisibilityType @on-action-change="onVisibilityTypeChange" />
+      <ChatHeaderVisibilityType
+        :isOpen="isOpen"
+        @on-action-change="onVisibilityTypeChange"
+      />
 
       <button @click.stop>
         <svg width="20" height="20" viewBox="0 0 24 24">
@@ -105,6 +108,7 @@ const onVisibilityTypeChange = (type: VisibilityType) => {
   user-select: none;
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
+  transition: all 0.3s ease;
 }
 
 .title {
@@ -129,8 +133,8 @@ const onVisibilityTypeChange = (type: VisibilityType) => {
 .drag-handle {
   cursor: grab;
   position: absolute;
-  top: 0px;
-  left: -50px;
+  top: 4px;
+  left: -44px;
   background: white !important;
   box-shadow: 0 16px 40px #00000040;
   border-radius: 50%;
@@ -138,8 +142,8 @@ const onVisibilityTypeChange = (type: VisibilityType) => {
   align-items: center;
   justify-content: center;
   padding: 8px;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
 }
 
 .drag-handle:active {

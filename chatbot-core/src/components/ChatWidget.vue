@@ -87,7 +87,7 @@ const widgetStyle = computed(() => ({
 }));
 
 function onMouseDown(e: MouseEvent) {
-  if (!config.isDraggable || !isOpen.value) return;
+  if (!config.isDraggable) return;
   isDragging.value = true;
   startPos.x = e.clientX - offset.x;
   startPos.y = e.clientY;
@@ -137,14 +137,7 @@ const onVisibilityChange = (type: VisibilityType) => {
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap");
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Google Sans", sans-serif;
-}
 .widget {
   position: fixed;
   width: 320px;

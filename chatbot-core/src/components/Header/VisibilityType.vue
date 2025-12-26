@@ -21,7 +21,13 @@
       ></path>
     </svg>
   </button>
-  <div class="header-actions-type" :class="{ opened: isVisibilityTypesOpened }">
+  <div
+    class="header-actions-type"
+    :class="{
+      opened: isVisibilityTypesOpened && isOpen,
+      onTop: isVisibilityTypesOpened && !isOpen,
+    }"
+  >
     <div
       class="header-actions-menuitem"
       :class="{ active: selectedType === 'sidebar' }"
@@ -171,6 +177,9 @@ import type { VisibilityType } from "../../entities/chat/types/visibilityType";
 const emit = defineEmits<{
   (e: "on-action-change", type: VisibilityType): void;
 }>();
+const props = defineProps<{
+  isOpen: boolean;
+}>();
 
 const isVisibilityTypesOpened = ref(false);
 
@@ -186,13 +195,17 @@ const onTypeChangeClick = () => {
 };
 </script>
 
-<style scoped>
+<style>
 .header-actions-type {
   gap: 1px;
   position: relative;
   padding: 4px;
   flex-direction: column;
+  background: white;
+  box-shadow: 0 4px 16px #00000020;
+  border-radius: 8px;
   display: none;
+  z-index: 50;
 }
 .actions-type-btn {
   border: none;
@@ -203,14 +216,30 @@ const onTypeChangeClick = () => {
 .header-actions-type.opened {
   display: flex;
   position: absolute;
+  opacity: 1;
   top: 48px;
+  bottom: auto;
   right: 0;
-  background: white;
-  box-shadow: 0 4px 16px #00000020;
-  border-radius: 8px;
   border-top-right-radius: 0;
+  border-top-left-radius: 0;
   z-index: 10;
 }
+.header-actions-type.onTop {
+  display: flex;
+  position: absolute;
+  opacity: 1;
+  right: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  z-index: 10;
+  top: auto;
+  bottom: 48px;
+}
+
+.header:has(.header-actions-type.onTop) {
+  border-top-right-radius: 0 !important;
+}
+
 .header-actions-menuitem {
   color: #000;
   background: #fff;
