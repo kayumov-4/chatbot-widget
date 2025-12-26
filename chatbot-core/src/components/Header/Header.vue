@@ -47,6 +47,8 @@
         </svg>
       </button>
 
+      <ChatHeaderVisibilityType @on-action-change="onVisibilityTypeChange" />
+
       <button @click.stop>
         <svg width="20" height="20" viewBox="0 0 24 24">
           <path
@@ -60,23 +62,31 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
+import ChatHeaderVisibilityType from "./VisibilityType.vue";
+import type { VisibilityType } from "../../entities/chat/types/visibilityType";
+const visibilityType = ref<VisibilityType>("floating");
 const props = defineProps<{
-  primaryColor: string;
   isOpen: boolean;
 }>();
 
 const emit = defineEmits<{
   (e: "toggle"): void;
   (e: "dragStart", ev: MouseEvent): void;
+  (e: "visibility-change", type: VisibilityType): void;
 }>();
 
-function emitToggle() {
+const emitToggle = () => {
   emit("toggle");
-}
+};
 
-function emitDrag(e: MouseEvent) {
+const emitDrag = (e: MouseEvent) => {
   emit("dragStart", e);
-}
+};
+const onVisibilityTypeChange = (type: VisibilityType) => {
+  visibilityType.value = type;
+  emit("visibility-change", type);
+};
 </script>
 
 <style scoped>
@@ -84,8 +94,8 @@ function emitDrag(e: MouseEvent) {
   min-height: 48px;
   background: linear-gradient(
     135deg,
-    color-mix(in srgb, v-bind(primaryColor), white 20%),
-    v-bind(primaryColor)
+    color-mix(in srgb, var(--primaryColor), white 20%),
+    var(--primaryColor)
   );
   color: white;
   display: flex;
@@ -142,5 +152,8 @@ function emitDrag(e: MouseEvent) {
 
 .drag-handle:hover svg path {
   fill: #333 !important;
+}
+.widget.mode-sidebar .header .drag-handle {
+  display: none !important;
 }
 </style>

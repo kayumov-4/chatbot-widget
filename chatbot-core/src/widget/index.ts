@@ -1,16 +1,12 @@
 import "./define";
-import { getConfig } from "../config/getConfig";
+import { applyWidgetConfig } from "./applyConfig";
 
 (function () {
-  if (document.querySelector("chat-widget")) return;
+  customElements.whenDefined("chat-widget").then(() => {
+    const widget = document.createElement("chat-widget");
 
-  const el = document.createElement("chat-widget");
-  const config = getConfig();
+    applyWidgetConfig(widget);
 
-  el.setAttribute("title", config.title);
-  el.setAttribute("primary-color", config.primaryColor);
-  el.setAttribute("position", config.position);
-  el.setAttribute("z-index", String(config.zIndex));
-
-  document.body.appendChild(el);
+    document.body.appendChild(widget);
+  });
 })();

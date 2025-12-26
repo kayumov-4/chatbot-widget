@@ -6,4 +6,6 @@ export interface WidgetConfig {
   welcomeMessage?: string;
   zIndex?: number;
   isDraggable?: boolean;
+  apiUrl?: string;
+  websocketUrl?: string;
 }

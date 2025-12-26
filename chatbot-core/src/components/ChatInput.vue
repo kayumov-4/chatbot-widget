@@ -52,7 +52,7 @@ function submit() {
 
 .input button {
   border: none;
-  background: #6c63ff;
+  background: var(--primaryColor);
   color: white;
   border-radius: 50%;
   width: 36px;
