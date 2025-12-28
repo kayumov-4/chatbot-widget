@@ -7,7 +7,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
 import type { ChatRole } from "../entities/chat/types/chatRole";
 
 const props = defineProps<{
@@ -16,19 +15,6 @@ const props = defineProps<{
   author?: string;
   createdAt: number;
 }>();
-
-const time = computed(() => {
-  const d = new Date(props.createdAt);
-  return d.toLocaleTimeString("ru-RU", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-});
-
-const authorLabel = computed(() => {
-  if (props.author) return props.author;
-  return props.role === "user" ? "Siz" : "Bot";
-});
 </script>
 
 <style scoped>

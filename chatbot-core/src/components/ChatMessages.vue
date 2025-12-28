@@ -1,5 +1,5 @@
 <template>
-  <div class="messages">
+  <div class="messages" ref="chatContainer">
     <div v-for="day in groupedMessages" :key="day.label" class="day-group">
       <div class="day-separator">
         <span>{{ day.label }}</span>
@@ -31,19 +31,33 @@
         </div>
       </div>
     </div>
+    <!-- <div v-if="isTyping" class="message-group bot">
+      <div class="bubble">...</div>
+    </div> -->
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref, watch } from "vue";
 import ChatMessageItem from "./ChatMessageItem.vue";
 import type { ChatMessage } from "../entities/chat/interfaces/chatMessage";
 import { getDayLabel } from "../utils/date";
 import { groupMessages } from "../utils/groupMessages";
 
+import { nextTick } from "vue";
+const chatContainer = ref<HTMLDivElement | null>(null);
+
 const props = defineProps<{
   messages: ChatMessage[];
+  isTyping?: boolean;
 }>();
+
+watch(props.messages, async () => {
+  await nextTick();
+  if (chatContainer.value) {
+    chatContainer.value.scrollTop = chatContainer.value.scrollHeight;
+  }
+});
 
 const groupedMessages = computed(() => {
   const days: Record<string, ChatMessage[]> = {};

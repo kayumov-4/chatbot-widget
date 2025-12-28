@@ -16,23 +16,29 @@
       @dragStart="onMouseDown"
     />
     <div class="widget-body">
-      <ChatMessages :messages="messages" />
+      <ChatMessages :messages="messages" :isTyping="isTyping" />
       <ChatInput @send="sendMessage" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, reactive, ref } from "vue";
 import ChatHeader from "./Header/Header.vue";
 import ChatMessages from "./ChatMessages.vue";
 import ChatInput from "./ChatInput.vue";
 import type { ChatMessage } from "../entities/chat/interfaces/chatMessage";
 import { getConfig } from "../config/getConfig";
-// import { connectCentrifugo, subscribeChannel } from "../socket/centrifugo";
-// import { getSessionChannel } from "../utils/channel";
+import { connectCentrifugo, subscribeChannel } from "../socket/centrifugo";
+import { getSessionChannel } from "../utils/getSessionChannel";
 import { sendQuestion } from "../api/chat";
 import type { VisibilityType } from "../entities/chat/types/visibilityType";
+
+const messages = ref<ChatMessage[]>([]);
+const isTyping = ref(false);
+const channel = getSessionChannel();
+let sub: any = null;
+let centrifuge: any = null;
 
 const props = defineProps({
   title: { type: String, default: "Chatbot" },
@@ -45,27 +51,53 @@ onMounted(async () => {
   messages.value.push({
     id: Date.now(),
     role: "bot",
-    text: getConfig().welcomeMessage,
+    text: getConfig().welcomeMessage || "Salom! Qanday yordam bera olaman?",
     author: "Bot",
     createdAt: Date.now(),
   });
-  // const channel = getSessionChannel();
+  centrifuge = await connectCentrifugo();
 
-  // await connectCentrifugo();
+  const handleMessage = (data: any) => {
+    const chunk = data?.text;
+    if (!chunk) return;
 
-  // subscribeChannel(channel, (data) => {
-  //   console.log("[WS MESSAGE RECEIVED]", data);
-  //   messages.value.push({
-  //     id: Date.now(),
-  //     role: "bot",
-  //     text: data.answer,
-  //     author: "Bot",
-  //     createdAt: Date.now(),
-  //   });
-  // });
+    const last = messages.value[messages.value.length - 1];
+
+    if (last && last.role === "bot") {
+      last.text += chunk;
+    } else {
+      messages.value.push({
+        id: Date.now(),
+        role: "bot",
+        text: chunk,
+        author: "Bot",
+        createdAt: Date.now(),
+      });
+    }
+  };
+
+  sub = subscribeChannel(channel, handleMessage);
+
+  centrifuge.on("connected", () => {
+    console.log("🟢 Reconnected");
+    sub = subscribeChannel(channel, handleMessage);
+  });
+
+  centrifuge.on("disconnected", () => {
+    console.warn("🔴 Disconnected, trying to reconnect...");
+  });
 });
+
+onBeforeUnmount(() => {
+  if (sub) {
+    sub.unsubscribe();
+  }
+  if (centrifuge) {
+    centrifuge.disconnect();
+  }
+});
+
 const isOpen = ref(false);
-const messages = ref<ChatMessage[]>([]);
 const config = getConfig();
 
 const isDragging = ref(false);
@@ -137,7 +169,6 @@ const onVisibilityChange = (type: VisibilityType) => {
 </script>
 
 <style scoped>
-
 .widget {
   position: fixed;
   width: 320px;
@@ -169,7 +200,6 @@ const onVisibilityChange = (type: VisibilityType) => {
   width: 360px;
   border-radius: 0 !important;
   box-shadow: -4px 0 20px rgba(0, 0, 0, 0.2);
-
 }
 
 .widget.mode-sidebar .widget-body {
