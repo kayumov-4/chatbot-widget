@@ -10,11 +10,6 @@ lerna-debug.log*
 # Dependencies
 node_modules
 
-# Ignore everything in dist EXCEPT widget build
-dist
-!dist/chatbot.js
-
-# SSR (agar ishlatilsa)
 dist-ssr
 
 # Env

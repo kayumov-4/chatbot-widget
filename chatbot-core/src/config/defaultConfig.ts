@@ -8,6 +8,6 @@ export const defaultConfig: Required<WidgetConfig> = {
   welcomeMessage: "Salom, qanday yordam bera olaman?",
   zIndex: 9999,
   isDraggable: true,
-  apiUrl: "http://chatbot.rsai.uz/chat",
+  apiUrl: "https://chatbot.rsai.uz/chat",
   websocketUrl: "wss://centrifugo.rsai.uz/connection/websocket",
 };
